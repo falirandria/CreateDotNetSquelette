@@ -16,9 +16,10 @@ read -p "Enter choice: " ARCHITECTURE_CHOICE
 
 
 echo "Select type of service:"
-echo "1) Web API"
-echo "2) Mobile Application (MAUI)"
-echo "3) Desktop Application"
+echo "1) Console"
+echo "2) Web API"
+echo "3) Mobile Application (MAUI)"
+echo "4) Desktop Application"
 read -p "Enter service choice: " SERVICE_CHOICE
 
 read -p "Enter directory for solution generation: " SOLUTION_DIR
