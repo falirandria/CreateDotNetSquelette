@@ -39,15 +39,15 @@ jobs:
       run: dotnet tool install --global dotnet-sonarscanner
     
     - name: Install dependencies
-      run: dotnet restore
+      run: dotnet restore src/$SOLUTION_NAME.sln
 
     - name: Build solution
-      run: dotnet build -p:EnableNETAnalyzers=true -p:AnalysisMode=AllEnabledByDefault --no-restore --configuration Release
+      run: dotnet build src/$SOLUTION_NAME.sln -p:EnableNETAnalyzers=true -p:AnalysisMode=AllEnabledByDefault --no-restore --configuration Release
 
     - name: Run tests
       run: |
         dotnet tool install --global coverlet.console
-        dotnet test $SOLUTION_NAME.sln --no-build --verbosity detailed /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./TestResults/coverage.xml
+        dotnet test src/$SOLUTION_NAME.sln --no-build --verbosity detailed /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./TestResults/coverage.xml
         
     - name: Run BDD Tests
       run: dotnet test --no-build --configuration Release --filter "Category=BDD" --logger:trx --results-directory ./TestResults
@@ -68,7 +68,7 @@ jobs:
           SONAR_TOKEN: \${{ secrets.SONAR_TOKEN }}
       run: |
         dotnet sonarscanner begin /k:"$PROJECT_NAME" /d:sonar.login="\${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="http://localhost:9000"
-        dotnet build $SOLUTION_NAME.sln
+        dotnet build src/$SOLUTION_NAME.sln
         dotnet sonarscanner end /d:sonar.login="\${{ secrets.SONAR_TOKEN }}"
 EOL
 

@@ -12,8 +12,6 @@ cd $SOLUTION_DIR/$PROJECT_NAME
 if [[ $ARCHITECTURE_CHOICE == "1" ]]; then
 # Generate file docker-compose.override.yml
 cat <<EOL > "docker-compose.override.yml"
-version: '3.4'
-
 services:
   ${PROJECT_NAME}DB:
     container_name: ${PROJECT_NAME}DB
@@ -37,22 +35,11 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
-      - ASPNETCORE_HTTPS_PORTS=8081
-      - ConnectionStrings__Database=Server=basketdb;Port=5432;Database=BookDb;User Id=postgres;Password=postgres;Include Error Detail=true
-      - ConnectionStrings__Redis=distributedcache:6379
-      - GrpcSettings__DiscountUrl=http://localhost:8081
-      - MessageBroker__Host=amqp://localhost:5672
-      - MessageBroker__UserName=guest
-      - MessageBroker__Password=guest
     depends_on:
       - ${PROJECT_NAME}DB
       - distributedcache
     ports:
       - "6001:8080"
-      - "6061:8081"
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
   
 EOL
 cat <<EOL > "docker-compose.yml"
@@ -100,16 +87,12 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
-      - ASPNETCORE_HTTPS_PORTS=8081
     depends_on:
       - ${PROJECT_NAME}DB
       - distributedcache
     ports:
       - "6001:8080"
       - "6061:8081"
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
 EOL
 
 cat <<EOL > "docker-compose.yml"
